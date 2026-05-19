@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1, user-scalable=no">
+<meta name="theme-color" content="#FFFFFF">
+<title>Путь инвестора — АльфаИнвестиции</title>
+<style>
+  :root {
+    --c-primary:      #EF3124;
+    --c-primary-dn:   #D62A1F;
+    --c-bg:           #F2F3F5;
+    --c-surface:      #FFFFFF;
+    --c-text:         rgba(3,3,6,.88);
+    --c-text-2:       rgba(3,3,6,.55);
+    --c-text-3:       rgba(3,3,6,.35);
+    --c-divider:      rgba(3,3,6,.08);
+    --c-green:        #12B23F;
+    --c-red:          #EF3124;
+    --r-card:         16px;
+    --r-btn:          12px;
+    --safe-top:       env(safe-area-inset-top, 0px);
+    --safe-bottom:    env(safe-area-inset-bottom, 0px);
+    --pad:            16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--c-bg); color: var(--c-text);
+    -webkit-user-select: none; user-select: none;
+    font-size: 15px; line-height: 1.4;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; padding: 0; }
+
+  /* ── AppBar ─────────────────────────── */
+  .appbar {
+    height: calc(56px + var(--safe-top)); padding-top: var(--safe-top);
+    background: var(--c-surface); display: flex; align-items: center;
+    padding-left: 8px; padding-right: 16px;
+    position: sticky; top: 0; z-index: 10;
+    box-shadow: 0 1px 0 var(--c-divider);
+  }
+  .appbar__btn {
+    width: 44px; height: 44px; display: flex; align-items: center;
+    justify-content: center; color: var(--c-text); flex-shrink: 0;
+  }
+  .appbar__title {
+    flex: 1; text-align: center; font-size: 18px; font-weight: 600;
+    color: var(--c-text); margin-right: 44px;
+  }
+
+  /* ── Offline ─────────────────────────── */
+  .offline-banner {
+    display: none; align-items: center; gap: 8px;
+    padding: 0 16px; height: 44px;
+    background: rgba(239,49,36,.08);
+    border-bottom: 1px solid rgba(239,49,36,.20);
+    font-size: 13px;
+  }
+  .offline-banner.visible { display: flex; }
+
+  /* ── Progress ────────────────────────── */
+  .progress-wrap { padding: 12px var(--pad) 0; background: var(--c-surface); }
+  .progress-track { height: 4px; border-radius: 2px; background: var(--c-divider); overflow: hidden; }
+  .progress-fill  { height: 100%; border-radius: 2px; background: var(--c-primary); width: 0%; transition: width 300ms ease-in-out; }
+  .progress-label { margin-top: 6px; font-size: 13px; color: var(--c-text-2); padding-bottom: 12px; }
+
+  /* ── Page header ─────────────────────── */
+  .page-header { padding: 0 var(--pad) 12px; background: var(--c-surface); }
+  .page-header__title    { font-size: 24px; font-weight: 700; margin: 0 0 6px; line-height: 1.2; }
+  .page-header__subtitle { font-size: 15px; color: var(--c-text-2); margin: 0; }
+
+  /* ── Step cards ──────────────────────── */
+  .steps-list { padding: 8px var(--pad); display: flex; flex-direction: column; gap: 8px; }
+  .step-card {
+    background: var(--c-surface); border-radius: var(--r-card);
+    border: 1px solid var(--c-divider); padding: 16px;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .step-card--active {
+    border: 2px solid var(--c-primary);
+    box-shadow: 0 2px 8px rgba(239,49,36,.12);
+  }
+  .step-card__header { display: flex; align-items: center; gap: 12px; }
+  .step-icon {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700;
+    color: var(--c-text-3); background: var(--c-divider);
+    transition: background 200ms ease;
+  }
+  .step-icon--active, .step-icon--completed { background: var(--c-primary); color: #fff; }
+  .step-card__meta { flex: 1; min-width: 0; }
+  .step-card__label { font-size: 13px; color: var(--c-text-3); margin: 0 0 2px; }
+  .step-card__title { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.3; }
+  .step-card__body {
+    font-size: 15px; color: var(--c-text-2); margin-top: 8px;
+    overflow: hidden; max-height: 0;
+    transition: max-height 250ms ease-in-out, opacity 200ms ease; opacity: 0;
+  }
+  .step-card--active .step-card__body { max-height: 400px; opacity: 1; }
+  .step-card__cta { margin-top: 12px; display: none; flex-direction: column; gap: 8px; }
+  .step-card--active .step-card__cta { display: flex; }
+
+  /* ── Buttons ─────────────────────────── */
+  .btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; border-radius: var(--r-btn);
+    font-size: 16px; font-weight: 600;
+    transition: opacity 120ms ease, background 120ms ease;
+    min-height: 48px; padding: 12px 16px; text-decoration: none;
+  }
+  .btn:active { opacity: .82; }
+  .btn--primary { background: var(--c-primary); color: #fff; }
+  .btn--primary:active { background: var(--c-primary-dn); opacity: 1; }
+  .btn--secondary {
+    background: transparent; color: var(--c-text-2);
+    border: 1px solid rgba(3,3,6,.20);
+    font-size: 15px; font-weight: 400; min-height: 44px;
+  }
+  .btn--ghost {
+    background: transparent; color: var(--c-primary);
+    font-size: 15px; font-weight: 400; min-height: 44px;
+    border: 1px solid var(--c-primary);
+  }
+
+  /* ── Success block ───────────────────── */
+  .success-block {
+    display: none; flex-direction: column; align-items: center; text-align: center;
+    padding: 24px var(--pad) 16px; background: var(--c-surface);
+    margin: 0 var(--pad); border-radius: var(--r-card);
+    opacity: 0; transition: opacity 300ms ease;
+  }
+  .success-block.visible { display: flex; opacity: 1; }
+  .success-block__icon   { margin-bottom: 16px; }
+  .success-block__title  { font-size: 24px; font-weight: 700; margin: 0 0 8px; }
+  .success-block__text   { font-size: 15px; color: var(--c-text-2); margin: 0 0 24px; line-height: 1.5; }
+
+  .disclaimer {
+    padding: 12px var(--pad) calc(32px + var(--safe-bottom));
+    font-size: 12px; color: var(--c-text-3); line-height: 1.4;
+  }
+
+  /* ── Skeleton ────────────────────────── */
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .skeleton {
+    background: linear-gradient(90deg,#F2F3F5 25%,#E8E8E8 50%,#F2F3F5 75%);
+    background-size: 200% 100%; animation: shimmer 1.5s linear infinite; border-radius: 8px;
+  }
+  .skeleton-card { height: 72px; border-radius: var(--r-card); margin: 0 var(--pad) 8px; }
+  .content-wrap { opacity: 0; transition: opacity 200ms ease; }
+  .content-wrap.ready { opacity: 1; }
+
+  @media (max-width: 320px) {
+    :root { --pad: 12px; }
+    .page-header__title { font-size: 20px; }
+  }
+
+  /* ════════════════════════════════════════
+     ПРЕВЬЮ-ЭКРАН (коллекция активов)
+     Слайдится поверх чеклиста справа
+     ════════════════════════════════════════ */
+  .preview-screen {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--c-bg); z-index: 50;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 280ms cubic-bezier(.4,0,.2,1);
+    overflow: hidden;
+  }
+  .preview-screen.open { transform: translateX(0); }
+
+  .preview-appbar {
+    height: calc(56px + var(--safe-top)); padding-top: var(--safe-top);
+    background: var(--c-surface); display: flex; align-items: center;
+    padding-left: 8px; padding-right: 16px;
+    border-bottom: 1px solid var(--c-divider); flex-shrink: 0;
+  }
+  .preview-appbar__title {
+    flex: 1; text-align: center; font-size: 17px; font-weight: 600;
+    margin-right: 44px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* Скроллируемая зона с карточками */
+  .preview-scroll {
+    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain; padding-bottom: 8px;
+  }
+
+  /* Шапка коллекции (категория + заголовок + описание) */
+  .collection-header {
+    padding: 20px var(--pad) 0; background: var(--c-surface);
+  }
+  .collection-header__category {
+    font-size: 13px; font-weight: 600; color: var(--c-text-3);
+    letter-spacing: .05em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .collection-header__title   { font-size: 22px; font-weight: 700; margin: 0 0 12px; line-height: 1.2; }
+  .collection-header__subtitle { font-size: 14px; color: var(--c-text-2); margin: 0 0 8px; line-height: 1.5; }
+  .collection-header__label   { margin-top: 16px; margin-bottom: 16px; font-size: 17px; color: var(--c-text); font-weight: 700; }
+
+  /* Карточка актива */
+  .asset-card {
+    background: var(--c-surface); margin: 0 var(--pad) 8px;
+    border-radius: var(--r-card); padding: 16px;
+    box-shadow: 0 1px 3px rgba(3,3,6,.06);
+  }
+  .asset-card__row  { display: flex; align-items: center; gap: 12px; }
+  .asset-logo {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: #fff;
+    overflow: hidden; background: var(--c-primary);
+  }
+  .asset-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .asset-meta { flex: 1; min-width: 0; }
+  .asset-name   { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .asset-ticker { font-size: 13px; color: var(--c-text-2); margin-top: 1px; }
+  .asset-price-col { text-align: right; flex-shrink: 0; }
+  .asset-price  { font-size: 15px; font-weight: 600; }
+  .asset-change { font-size: 13px; margin-top: 2px; }
+  .asset-change--pos { color: var(--c-green); }
+  .asset-change--neg { color: var(--c-red); }
+
+  /* Описание с кнопкой Подробнее / Свернуть */
+  .asset-desc-wrap { margin-top: 10px; }
+  .asset-desc {
+    font-size: 14px; color: var(--c-text-2); line-height: 1.5;
+    /* Ограничиваем 3 строки */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: none;
+  }
+  .asset-desc.expanded {
+    display: block;       /* убираем line-clamp */
+    overflow: visible;
+  }
+  .asset-toggle {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 4px; font-size: 14px; color: var(--c-primary);
+    cursor: pointer; background: none; border: none; padding: 0;
+    font-family: inherit;
+  }
+
+  /* Кнопка Купить */
+  .asset-buy-btn {
+    margin-top: 12px; width: 100%; min-height: 44px;
+    border-radius: 10px; border: 1px solid var(--c-divider);
+    background: var(--c-surface); color: var(--c-text);
+    font-size: 15px; font-weight: 400; cursor: pointer;
+    font-family: inherit; transition: background 120ms ease;
+  }
+  .asset-buy-btn:active { background: var(--c-bg); }
+
+  /* Нижняя панель превью */
+  .preview-footer {
+    flex-shrink: 0; padding: 12px var(--pad) calc(16px + var(--safe-bottom));
+    background: var(--c-surface); border-top: 1px solid var(--c-divider);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .preview-footer__hint { font-size: 13px; color: var(--c-text-3); text-align: center; padding-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ ЧЕКЛИСТ ══════════ -->
+<header class="appbar">
+  <button class="appbar__btn" aria-label="Закрыть" onclick="handleClose()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <span class="appbar__title">Путь инвестора</span>
+</header>
+
+<div class="offline-banner" id="offlineBanner" role="alert">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="#EF3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Нет соединения. Попробуйте позже
+</div>
+
+<!-- Skeleton -->
+<div id="skeleton">
+  <div class="progress-wrap">
+    <div class="skeleton" style="height:4px;border-radius:2px;"></div>
+    <div style="height:30px;"></div>
+  </div>
+  <div style="padding:0 16px 12px;background:#fff;">
+    <div class="skeleton" style="height:24px;width:70%;border-radius:6px;margin-bottom:8px;"></div>
+    <div class="skeleton" style="height:15px;width:90%;border-radius:4px;"></div>
+  </div>
+  <div class="skeleton skeleton-card" style="margin-top:8px;"></div>
+  <div class="skeleton skeleton-card"></div>
+  <div class="skeleton skeleton-card"></div>
+  <div class="skeleton skeleton-card"></div>
+  <div class="skeleton skeleton-card"></div>
+</div>
+
+<div class="content-wrap" id="contentWrap">
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">Шаг 0 из 5</div>
+  </div>
+
+  <div class="page-header">
+    <h1 class="page-header__title">Как начать инвестировать</h1>
+    <p class="page-header__subtitle">Пройдите 5 шагов — от изучения рынка до первой сделки</p>
+  </div>
+
+  <div class="steps-list">
+    <div class="step-card" id="step-card-1">
+      <div class="step-card__header">
+        <div class="step-icon" id="step-icon-1">1</div>
+        <div class="step-card__meta">
+          <div class="step-card__label">Шаг 1</div>
+          <div class="step-card__title">Как устроен фондовый рынок</div>
+        </div>
+      </div>
+      <div class="step-card__body">Начните с основ: что такое акции, облигации и фонды, как работает биржа.</div>
+      <div class="step-card__cta" id="cta-1"></div>
+    </div>
+
+    <div class="step-card" id="step-card-2">
+      <div class="step-card__header">
+        <div class="step-icon" id="step-icon-2">2</div>
+        <div class="step-card__meta">
+          <div class="step-card__label">Шаг 2</div>
+          <div class="step-card__title">Выбери актив из подборки</div>
+        </div>
+      </div>
+      <div class="step-card__body">Посмотрите подборку самых популярных акций — народный портфель Мосбиржи.</div>
+      <div class="step-card__cta" id="cta-2"></div>
+    </div>
+
+    <div class="step-card" id="step-card-3">
+      <div class="step-card__header">
+        <div class="step-icon" id="step-icon-3">3</div>
+        <div class="step-card__meta">
+          <div class="step-card__label">Шаг 3</div>
+          <div class="step-card__title">Налоговые льготы ИИС</div>
+        </div>
+      </div>
+      <div class="step-card__body">Узнайте, как инвесторы экономят на налогах с помощью индивидуального инвестиционного счёта.</div>
+      <div class="step-card__cta" id="cta-3"></div>
+    </div>
+
+    <div class="step-card" id="step-card-4">
+      <div class="step-card__header">
+        <div class="step-icon" id="step-icon-4">4</div>
+        <div class="step-card__meta">
+          <div class="step-card__label">Шаг 4</div>
+          <div class="step-card__title">Что купить на ИИС</div>
+        </div>
+      </div>
+      <div class="step-card__body">Подборка акций для долгосрочной стратегии на ИИС.</div>
+      <div class="step-card__cta" id="cta-4"></div>
+    </div>
+
+    <div class="step-card" id="step-card-5">
+      <div class="step-card__header">
+        <div class="step-icon" id="step-icon-5">5</div>
+        <div class="step-card__meta">
+          <div class="step-card__label">Шаг 5</div>
+          <div class="step-card__title">Установи приложение АльфаИнвестиции</div>
+        </div>
+      </div>
+      <div class="step-card__body">Больше стратегий, аналитика и удобный портфель — в отдельном приложении.</div>
+      <div class="step-card__cta" id="cta-5"></div>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="success-block" id="successBlock" role="status" aria-live="polite">
+    <div class="success-block__icon">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="24" fill="rgba(239,49,36,.10)"/>
+        <path d="M24 12l3.09 6.26L34 19.27l-5 4.87 1.18 6.86L24 27.77l-6.18 3.23L19 24.14l-5-4.87 6.91-1.01L24 12z" fill="#EF3124"/>
+      </svg>
+    </div>
+    <h2 class="success-block__title">Отлично!</h2>
+    <p class="success-block__text">Вы прошли все этапы пути к инвестициям.<br>Теперь вы готовы к первой сделке.</p>
+    <button class="btn btn--primary" onclick="handleClose()" style="width:100%">Закрыть</button>
+  </div>
+
+  <p class="disclaimer">Не является индивидуальной инвестиционной рекомендацией.</p>
+</div>
+
+<!-- ══════════ ПРЕВЬЮ-ЭКРАН ПОДБОРКИ ══════════
+     Один переиспользуемый оверлей для шагов 2 и 4.
+     Контент рендерится из config.json.
+     ══════════════════════════════════════════ -->
+<div class="preview-screen" id="previewScreen" role="dialog" aria-modal="true" aria-hidden="true">
+
+  <div class="preview-appbar">
+    <button class="appbar__btn" aria-label="Назад" onclick="hidePreview()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <span class="preview-appbar__title" id="previewTitle"></span>
+  </div>
+
+  <!-- Карточки активов рендерятся сюда из JS -->
+  <div class="preview-scroll" id="previewScroll"></div>
+
+  <div class="preview-footer">
+    <div class="preview-footer__hint" id="previewHint"></div>
+    <button class="btn btn--primary"   id="previewOpenAllBtn" onclick="confirmPreview()">Открыть всю подборку в АИ</button>
+    <button class="btn btn--secondary" onclick="hidePreview()">Вернуться к чеклисту</button>
+  </div>
+
+</div>
+
+<script>
+/* =============================================
+   E-002 — Onboarding Checklist  2026-05-19
+
+   Данные активов и ссылки на кнопки берутся из
+   GIST_CONFIG_URL (GitHub Gist, config.json).
+   Без URL страница работает с дефолтами.
+   ============================================= */
+
+// ─── Gist ────────────────────────────────────────
+var GIST_CONFIG_URL = 'https://gist.githubusercontent.com/nsdooris/fef131f19d90c90877958827dbcf1a6a/raw/ghk-7843.json';
+
+// ─── Step config (дефолты, перекрываются Gist) ───
+var STEP_CONFIG = [
+  { id:1, ctaLabel:'Пройти обучение',    ctaUrl:'a-investments://CA?type=collections&value=9996',  type:'deeplink' },
+  { id:2, ctaLabel:'Открыть подборку',   ctaUrl:'a-investments://CA?type=collections&value=9996',  type:'collection', collectionKey:'step2' },
+  { id:3, ctaLabel:'Изучить льготы ИИС', ctaUrl:'',                                                type:'deeplink' },
+  { id:4, ctaLabel:'Открыть подборку',   ctaUrl:'a-investments://CA?type=collections&value=10224', type:'collection', collectionKey:'step4' },
+  { id:5, ctaLabel:'',                   ctaUrl:'',                                                type:'app' }
+];
+
+// ─── Collections data (заполняется из Gist) ──────
+// Структура: { step2: { title, subtitle, category_label, fallback_deeplink, assets:[...] }, step4: {...} }
+var COLLECTIONS = {};
+
+var APP_STORE_URL  = ''; // TODO: заполнить в Gist
+var PLAY_STORE_URL = '';
+
+var STORAGE_KEY = 'e002_checklist_state';
+var TOTAL       = 5;
+
+var urlParams    = new URLSearchParams(window.location.search);
+var variantParam = urlParams.get('v') || '';
+var userHash     = urlParams.get('u') || '';
+
+// ─── Tracking stub ────────────────────────────────
+function track(ev, props) {
+  try {
+    var p = Object.assign({ variant: variantParam, user: userHash, experiment: 'E-002' }, props || {});
+    console && console.log('[E-002]', ev, p);
+    // TODO: window.analytics && window.analytics.track(ev, p);
+  } catch(e) {}
+}
+if (!variantParam) track('e002_invalid_assignment', { url: location.href });
+
+// ─── Native bridge ────────────────────────────────
+function hasBridge() { return typeof window.AlfaIntegration !== 'undefined'; }
+function handleClose() {
+  track('e002_webview_closed', { steps_completed: countDone() });
+  try { hasBridge() ? AlfaIntegration.closeWebView() : history.back(); }
+  catch(e) { history.back(); }
+}
+function openDeeplink(url) {
+  if (!url) return;
+  try { hasBridge() ? AlfaIntegration.openDeeplink(url) : window.open(url,'_blank'); }
+  catch(e) { try { window.open(url,'_blank'); } catch(e2){} }
+}
+function openExternal(url) {
+  if (!url) return;
+  try { hasBridge() ? AlfaIntegration.openExternalUrl(url) : (location.href = url); }
+  catch(e) { try { location.href = url; } catch(e2){} }
+}
+
+// ─── UA ──────────────────────────────────────────
+var isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+var isAndroid = /Android/.test(navigator.userAgent);
+
+// ─── State ───────────────────────────────────────
+function loadState() {
+  try {
+    var r = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    if (Array.isArray(r.steps) && r.steps.length === TOTAL) return r.steps;
+  } catch(e) {}
+  return [false,false,false,false,false];
+}
+function saveState(s) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ steps: s })); } catch(e) {}
+}
+var steps = loadState();
+function countDone() { return steps.filter(Boolean).length; }
+
+// ─── Progress ─────────────────────────────────────
+function updateProgress(animate) {
+  var fill  = document.getElementById('progressFill');
+  var label = document.getElementById('progressLabel');
+  if (!fill || !label) return;
+  if (!animate) fill.style.transition = 'none';
+  fill.style.width = (countDone() / TOTAL * 100) + '%';
+  label.textContent = 'Шаг ' + countDone() + ' из ' + TOTAL;
+  if (!animate) setTimeout(function(){ fill.style.transition = ''; }, 50);
+}
+
+// ─── Render checklist cards ───────────────────────
+var CHECK_SVG = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function stepState(i) {
+  if (steps[i]) return 'completed';
+  for (var j = 0; j < TOTAL; j++) if (!steps[j]) return j === i ? 'active' : 'locked';
+  return 'locked';
+}
+
+function renderCard(i) {
+  var s    = stepState(i);
+  var card = document.getElementById('step-card-' + (i+1));
+  var icon = document.getElementById('step-icon-' + (i+1));
+  if (!card || !icon) return;
+  card.className = 'step-card' + (s==='active'?' step-card--active':'') + (s==='completed'?' step-card--completed':'');
+  icon.className = 'step-icon' + (s==='active'?' step-icon--active':'') + (s==='completed'?' step-icon--completed':'');
+  icon.innerHTML = s==='completed' ? CHECK_SVG : String(i+1);
+}
+
+function renderCta(i) {
+  var el = document.getElementById('cta-' + (i+1));
+  if (!el) return;
+  el.innerHTML = '';
+  if (stepState(i) !== 'active') return;
+
+  var cfg = STEP_CONFIG[i];
+  if (cfg.type === 'app') {
+    var both = !isIOS && !isAndroid;
+    if (isIOS||both)     el.appendChild(mkBtn('primary','Скачать для iPhone',  function(){ doApp(i,'appstore_open', APP_STORE_URL);  }));
+    if (isAndroid||both) el.appendChild(mkBtn('primary','Скачать для Android', function(){ doApp(i,'playstore_open',PLAY_STORE_URL); }));
+  } else if (cfg.type === 'collection') {
+    ;(function(idx){ el.appendChild(mkBtn('primary', cfg.ctaLabel, function(){ showCollection(idx); })); })(i);
+  } else {
+    ;(function(idx){ el.appendChild(mkBtn('primary', cfg.ctaLabel, function(){ doDeeplink(idx); })); })(i);
+  }
+}
+
+function mkBtn(style, text, fn) {
+  var b = document.createElement('button');
+  b.className = 'btn btn--' + style;
+  b.textContent = text;
+  b.onclick = fn;
+  return b;
+}
+
+function renderAll(animate) {
+  for (var i = 0; i < TOTAL; i++) { renderCard(i); renderCta(i); }
+  updateProgress(animate);
+  var block = document.getElementById('successBlock');
+  if (block) {
+    if (countDone() === TOTAL) block.classList.add('visible');
+    else { block.classList.remove('visible'); block.style.opacity = '0'; }
+  }
+}
+
+// ─── Step completion helpers ──────────────────────
+function markDone(i, action) {
+  if (steps[i]) return;
+  steps[i] = true; saveState(steps);
+  // TODO: track('e002_step_cta_clicked', {step:i+1, action:action})
+  track('e002_step_cta_clicked', { step: i+1, action: action });
+  // TODO: track('e002_step_completed', {step:i+1})
+  track('e002_step_completed', { step: i+1 });
+  if (countDone() === TOTAL) track('e002_checklist_all_completed', {});
+  renderAll(true);
+}
+function doDeeplink(i) { var url = STEP_CONFIG[i].ctaUrl; markDone(i, 'deeplink'); openDeeplink(url); }
+function doApp(i, action, url) { markDone(i, action); openExternal(url); }
+
+// ═════════════════════════════════════════════════
+// ПРЕВЬЮ-ЭКРАН ПОДБОРКИ
+// ═════════════════════════════════════════════════
+var previewStepIdx = -1;
+
+// Рендерим коллекцию из данных Gist
+function buildCollectionHTML(col) {
+  var html = '';
+
+  // Шапка коллекции
+  html += '<div class="collection-header">';
+  if (col.category_label) html += '<div class="collection-header__category">' + esc(col.category_label) + '</div>';
+  html += '<h2 class="collection-header__title">'    + esc(col.title)    + '</h2>';
+  if (col.subtitle) {
+    // \n\n → отдельные абзацы
+    var subtitleHtml = col.subtitle.split(/\n\n/).map(function(p){ return '<p class="collection-header__subtitle">' + esc(p) + '</p>'; }).join('');
+    html += subtitleHtml;
+  }
+  html += '<div class="collection-header__label">Состав коллекции</div>';
+  html += '</div>';
+
+  // Карточки активов
+  (col.assets || []).forEach(function(asset, idx) {
+    var changeClass = asset.change_positive ? 'asset-change--pos' : 'asset-change--neg';
+
+    // Логотип: img если есть URL, иначе цветной круг с первой буквой
+    var logoHtml;
+    var validUrl = asset.image_url && asset.image_url.indexOf('http') === 0;
+    if (validUrl) {
+      var bg = asset.avatar_color || '#EF3124';
+      logoHtml = '<div class="asset-logo" style="background:' + esc(bg) + '">' +
+        '<img src="' + esc(asset.image_url) + '" alt="" ' +
+        'onerror="this.parentNode.innerHTML=\'<span>' + esc((asset.name||'?')[0]) + '</span>\'">' +
+        '</div>';
+    } else {
+      var bg2 = asset.avatar_color || '#EF3124';
+      var textColor = isLightColor(bg2) ? '#333' : '#fff';
+      logoHtml = '<div class="asset-logo" style="background:' + esc(bg2) + ';color:' + textColor + '">' +
+        esc((asset.name||'?')[0]) + '</div>';
+    }
+
+    var uid = 'asset-' + idx; // уникальный id для toggle
+
+    html += '<div class="asset-card">';
+    html +=   '<div class="asset-card__row">';
+    html +=     logoHtml;
+    html +=     '<div class="asset-meta">';
+    html +=       '<div class="asset-name">'   + esc(asset.name   || '') + '</div>';
+    html +=       '<div class="asset-ticker">' + esc(asset.ticker || '') + '</div>';
+    html +=     '</div>';
+    html +=     '<div class="asset-price-col">';
+    html +=       '<div class="asset-price">' + esc(asset.price  || '') + '</div>';
+    html +=       '<div class="asset-change ' + changeClass + '">' + esc(asset.change || '') + '</div>';
+    html +=     '</div>';
+    html +=   '</div>';
+
+    if (asset.description) {
+      html += '<div class="asset-desc-wrap">';
+      html +=   '<div class="asset-desc" id="desc-' + uid + '">' + esc(asset.description) + '</div>';
+      html +=   '<button class="asset-toggle" id="toggle-' + uid + '" ' +
+                  'onclick="toggleDesc(\'' + uid + '\')" aria-expanded="false">' +
+                  'Подробнее' +
+                '</button>';
+      html += '</div>';
+    }
+
+    if (asset.deeplink) {
+      ;(function(dl, stepI){
+        html += '<button class="asset-buy-btn" ' +
+          'onclick="buyAsset(\'' + esc(dl) + '\',' + stepI + ')">' +
+          'Купить' +
+          '</button>';
+      })(asset.deeplink, idx);
+    }
+
+    html += '</div>'; // /asset-card
+  });
+
+  return html;
+}
+
+// Разворачивает/сворачивает описание
+function toggleDesc(uid) {
+  var desc   = document.getElementById('desc-'   + uid);
+  var toggle = document.getElementById('toggle-' + uid);
+  if (!desc || !toggle) return;
+  var expanded = desc.classList.toggle('expanded');
+  toggle.classList.toggle('expanded', expanded);
+  toggle.setAttribute('aria-expanded', expanded);
+  toggle.childNodes[0].textContent = expanded ? 'Свернуть' : 'Подробнее';
+}
+
+// Купить актив из подборки → deeplink + отметить шаг выполненным
+function buyAsset(deeplink, assetIdx) {
+  if (previewStepIdx < 0) return;
+  var i = previewStepIdx;
+  // TODO: track('e002_asset_buy_clicked', {step:i+1, asset_index:assetIdx})
+  track('e002_asset_buy_clicked', { step: i+1, asset_index: assetIdx });
+  markDone(i, 'buy_asset');
+  hidePreview();
+  openDeeplink(deeplink);
+}
+
+function showCollection(i) {
+  previewStepIdx = i;
+  var cfg = STEP_CONFIG[i];
+  var col = COLLECTIONS[cfg.collectionKey];
+
+  var scroll = document.getElementById('previewScroll');
+  var title  = document.getElementById('previewTitle');
+  var hint   = document.getElementById('previewHint');
+
+  if (col) {
+    title.textContent  = col.title || cfg.ctaLabel;
+    hint.textContent   = '';
+    scroll.innerHTML   = buildCollectionHTML(col);
+    scroll.scrollTop   = 0;
+    requestAnimationFrame(function() {
+      scroll.querySelectorAll('.asset-desc').forEach(function(desc) {
+        if (desc.scrollHeight <= desc.clientHeight + 1) {
+          var toggle = desc.parentNode.querySelector('.asset-toggle');
+          if (toggle) toggle.style.display = 'none';
+        }
+      });
+    });
+  } else {
+    // Данные ещё не загружены — показываем заглушку
+    title.textContent = cfg.previewTitle || cfg.ctaLabel;
+    hint.textContent  = 'Загрузка...';
+    scroll.innerHTML  = '<div style="padding:40px 16px;text-align:center;color:var(--c-text-2)">Загрузка подборки…</div>';
+  }
+
+  document.body.style.overflow = 'hidden';
+  var screen = document.getElementById('previewScreen');
+  screen.classList.add('open');
+  screen.setAttribute('aria-hidden','false');
+
+  // TODO: track('e002_preview_opened', {step:i+1})
+  track('e002_preview_opened', { step: i+1 });
+}
+
+function hidePreview() {
+  var screen = document.getElementById('previewScreen');
+  screen.classList.remove('open');
+  screen.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+  track('e002_preview_closed', { step: previewStepIdx + 1, completed: steps[previewStepIdx] || false });
+  previewStepIdx = -1;
+}
+
+// «Открыть всю подборку в АИ» — нижняя кнопка
+function confirmPreview() {
+  if (previewStepIdx < 0) return;
+  var i   = previewStepIdx;
+  var cfg = STEP_CONFIG[i];
+  var col = COLLECTIONS[cfg.collectionKey];
+  var url = (col && col.fallback_deeplink) || cfg.ctaUrl;
+  markDone(i, 'open_all');
+  hidePreview();
+  openDeeplink(url);
+}
+
+// Hardware back / popstate
+window.addEventListener('popstate', function() {
+  var s = document.getElementById('previewScreen');
+  if (s && s.classList.contains('open')) hidePreview();
+});
+
+// ─── Gist config loader ───────────────────────────
+function applyConfig(config) {
+  if (!config) return;
+
+  // Шаги
+  if (Array.isArray(config.steps)) {
+    config.steps.forEach(function(s) {
+      var idx = s.id - 1;
+      if (idx < 0 || idx >= TOTAL) return;
+      if (s.cta_label)      STEP_CONFIG[idx].ctaLabel = s.cta_label;
+      if (s.cta_url)        STEP_CONFIG[idx].ctaUrl   = s.cta_url;
+      if (s.app_store_url)  APP_STORE_URL  = s.app_store_url;
+      if (s.play_store_url) PLAY_STORE_URL = s.play_store_url;
+    });
+  }
+
+  // Данные подборок
+  if (config.collections) {
+    Object.keys(config.collections).forEach(function(key) {
+      COLLECTIONS[key] = config.collections[key];
+    });
+  }
+
+  renderAll(false); // перерисовать с новыми данными
+}
+
+function loadGistConfig() {
+  if (!GIST_CONFIG_URL) return;
+  try {
+    fetch(GIST_CONFIG_URL + '?t=' + Date.now())
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(c){ if (c) applyConfig(c); })
+      .catch(function(){});
+  } catch(e) {}
+}
+
+// ─── Helpers ─────────────────────────────────────
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function isLightColor(hex) {
+  var c = hex.replace('#','');
+  if (c.length === 3) c = c[0]+c[0]+c[1]+c[1]+c[2]+c[2];
+  var r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
+  return (r*299 + g*587 + b*114) / 1000 > 128;
+}
+
+// ─── Offline ──────────────────────────────────────
+function updateOffline() {
+  var b = document.getElementById('offlineBanner');
+  if (b) b.classList.toggle('visible', !navigator.onLine);
+}
+window.addEventListener('online',  updateOffline);
+window.addEventListener('offline', updateOffline);
+
+// ─── Visibility change ────────────────────────────
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') { steps = loadState(); renderAll(false); }
+});
+
+// ─── Init ─────────────────────────────────────────
+function init() {
+  document.body.setAttribute('data-experiment','E-002');
+  document.body.setAttribute('data-variant', variantParam || 'unknown');
+  updateOffline();
+  renderAll(false);
+  document.getElementById('skeleton').style.display = 'none';
+  document.getElementById('contentWrap').classList.add('ready');
+  // TODO: track('e002_checklist_opened', {variant:variantParam})
+  track('e002_checklist_opened', { variant: variantParam });
+  loadGistConfig();
+}
+
+document.readyState === 'loading'
+  ? document.addEventListener('DOMContentLoaded', init)
+  : init();
+</script>
+</body>
+</html>

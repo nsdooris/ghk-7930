@@ -1,0 +1,141 @@
+{
+  "_comment": "E-002 Onboarding Checklist — конфиг. Разместите как GitHub Gist, вставьте raw-ссылку в index.html (GIST_CONFIG_URL). Цены обновляйте вручную или автоматически.",
+
+  "steps": [
+    {
+      "id": 1,
+      "cta_label": "Пройти обучение",
+      "cta_url": "a-investments://CA?type=collections&value=9996"
+    },
+    {
+      "id": 2,
+      "cta_label": "Открыть подборку",
+      "cta_url": "a-investments://CA?type=collections&value=9996"
+    },
+    {
+      "id": 3,
+      "cta_label": "Изучить льготы ИИС",
+      "cta_url": "ВСТАВЬТЕ_ССЫЛКУ_НА_СТАТЬЮ_ПРО_ИИС"
+    },
+    {
+      "id": 4,
+      "cta_label": "Открыть подборку",
+      "cta_url": "a-investments://CA?type=collections&value=10224"
+    },
+    {
+      "id": 5,
+      "app_store_url": "ВСТАВЬТЕ_ССЫЛКУ_APP_STORE",
+      "play_store_url": "ВСТАВЬТЕ_ССЫЛКУ_GOOGLE_PLAY"
+    }
+  ],
+
+  "collections": {
+
+    "step2": {
+      "title": "Самые популярные акции",
+      "subtitle": "В «Народный портфель» Московской биржи входит топ-10 акций, которые чаще всего встречаются в портфелях российских частных инвесторов. Это полезно знать, ведь сейчас именно частные инвесторы занимают более 60% в торговых оборотах — они создают тренды на рынке и влияют на стоимость бумаг.\n\nВот наиболее интересные акции из состава «Народного портфеля», у которых, по мнению аналитиков Альфа-Инвестиции, есть высокий потенциал роста:",
+      "category_label": "АКЦИИ",
+      "fallback_deeplink": "a-investments://CA?type=collections&value=9996",
+      "assets": [
+        {
+          "name": "Сбербанк",
+          "ticker": "SBER",
+          "image_url": "ВСТАВЬТЕ_URL_ЛОГОТИПА",
+          "avatar_color": "#21A038",
+          "deeplink": "a-investments://CA?type=instrument&value=SBER",
+          "price": "324,48 ₽",
+          "change": "−0,23 %",
+          "change_positive": false,
+          "description": "Крупнейший банк страны. Сбербанк наращивает прибыль даже в сложных экономических условиях и выплачивает дивиденды — они создают тренды на рынке и влияют на стоимость бумаг."
+        },
+        {
+          "name": "ЛУКОЙЛ",
+          "ticker": "LKOH",
+          "image_url": "ВСТАВЬТЕ_URL_ЛОГОТИПА",
+          "avatar_color": "#F26522",
+          "deeplink": "a-investments://CA?type=instrument&value=LKOH",
+          "price": "5 222 ₽",
+          "change": "+0,06 %",
+          "change_positive": true,
+          "description": "Одна из крупнейших и стабильных нефтяных компаний страны. Курс рубля и цены нефти в значительной степени влияют на финансовые показатели компании."
+        },
+        {
+          "name": "Яндекс",
+          "ticker": "YDEX",
+          "image_url": "ВСТАВЬТЕ_URL_ЛОГОТИПА",
+          "avatar_color": "#FF0000",
+          "deeplink": "a-investments://CA?type=instrument&value=YDEX",
+          "price": "4 086,50 ₽",
+          "change": "+0,39 %",
+          "change_positive": true,
+          "description": "Главная технологическая компания страны. Работает во множестве направлений и растёт быстрее рынка."
+        },
+        {
+          "name": "Т-Технологии",
+          "ticker": "T",
+          "image_url": "ВСТАВЬТЕ_URL_ЛОГОТИПА",
+          "avatar_color": "#FFDD2D",
+          "deeplink": "a-investments://CA?type=instrument&value=T",
+          "price": "316,36 ₽",
+          "change": "+1,45 %",
+          "change_positive": true,
+          "description": "Финансовая компания с диверсифицированным бизнесом: банк, страхование, инвестиции и многое другое."
+        }
+      ]
+    },
+
+    "step4": {
+      "title": "Какие акции купить на ИИС",
+      "subtitle": "Индивидуальный инвестиционный счёт — это особый вид брокерского счёта, на котором можно реализовать разные стратегии в зависимости от целей и риск-профиля. Это могут быть как вложения на несколько месяцев, так и на несколько лет. Если инвестор планирует собрать долгосрочный портфель акций, то подойдут наиболее крупные и стабильные компании.",
+      "category_label": "АКЦИИ",
+      "fallback_deeplink": "a-investments://CA?type=collections&value=10224",
+      "assets": [
+        {
+          "name": "Сбербанк",
+          "ticker": "SBER",
+          "image_url": "ВСТАВЬТЕ_URL_ЛОГОТИПА",
+          "avatar_color": "#21A038",
+          "deeplink": "a-investments://CA?type=instrument&value=SBER",
+          "price": "324,49 ₽",
+          "change": "−0,22 %",
+          "change_positive": false,
+          "description": "Крупнейший банк в стране, имеет высокую рентабельность и растущую прибыль. Активно развивает свою экосистему и стабильно выплачивает дивиденды."
+        },
+        {
+          "name": "Т-Технологии",
+          "ticker": "T",
+          "image_url": "ВСТАВЬТЕ_URL_ЛОГОТИПА",
+          "avatar_color": "#FFDD2D",
+          "deeplink": "a-investments://CA?type=instrument&value=T",
+          "price": "316,44 ₽",
+          "change": "+1,48 %",
+          "change_positive": true,
+          "description": "Самый быстрорастущий и рентабельный представитель банковского сектора, рост которого ещё продолжается. Бизнес диверсифицирован далеко за пределы банкинга."
+        },
+        {
+          "name": "Полюс",
+          "ticker": "PLZL",
+          "image_url": "ВСТАВЬТЕ_URL_ЛОГОТИПА",
+          "avatar_color": "#FFB800",
+          "deeplink": "a-investments://CA?type=instrument&value=PLZL",
+          "price": "2 080,40 ₽",
+          "change": "−0,47 %",
+          "change_positive": false,
+          "description": "Крупнейший золотодобытчик в России и один из самых крупных в мире. Компания развивает масштабный проект Сухой Лог с огромными запасами золота."
+        },
+        {
+          "name": "НОВАТЭК",
+          "ticker": "NVTK",
+          "image_url": "ВСТАВЬТЕ_URL_ЛОГОТИПА",
+          "avatar_color": "#003DA5",
+          "deeplink": "a-investments://CA?type=instrument&value=NVTK",
+          "price": "1 134,10 ₽",
+          "change": "−1,02 %",
+          "change_positive": false,
+          "description": "Крупнейший частный производитель газа в России и ключевой игрок на рынке СПГ. Поставки газа идут даже в условиях санкций."
+        }
+      ]
+    }
+
+  }
+}

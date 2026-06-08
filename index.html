@@ -103,10 +103,17 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: background 200ms ease;
 }
 .step-icon--active    { background: var(--c-primary); color: #fff; }
-.step-icon--completed { background: var(--c-primary); color: #fff; }
+.step-icon--completed { background: #0A8F3C; color: #fff; }
 .step-card__meta  { flex: 1; min-width: 0; }
 .step-card__label { font-size: 13px; color: var(--c-text-3); margin: 0 0 2px; }
 .step-card__title { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.3; }
+.step-card__subtitle {
+  font-size: 13px; color: var(--c-text-2); margin: 3px 0 0; line-height: 1.3;
+  display: none;
+}
+.step-card--completed .step-card__subtitle { display: block; }
+.step-card__check { display: none; flex-shrink: 0; align-items: center; }
+.step-card--completed .step-card__check { display: flex; }
 .step-card__body  {
   font-size: 15px; color: var(--c-text-2); margin-top: 8px;
   overflow: hidden; max-height: 0;
@@ -412,6 +419,10 @@ img.asset-logo { object-fit: cover; }
         <div class="step-card__meta">
           <div class="step-card__label">Шаг 1</div>
           <div class="step-card__title">Счёт открыт</div>
+          <div class="step-card__subtitle">Первый шаг уже сделан.</div>
+        </div>
+        <div class="step-card__check">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l4.5 4.5L16 7" stroke="#0A8F3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
       <!-- тело и CTA отсутствуют — шаг без действия -->
@@ -423,7 +434,11 @@ img.asset-logo { object-fit: cover; }
         <div class="step-icon" id="step-icon-2">2</div>
         <div class="step-card__meta">
           <div class="step-card__label">Шаг 2</div>
-          <div class="step-card__title">Как устроен фондовый рынок</div>
+          <div class="step-card__title">Курс на инвестиции</div>
+          <div class="step-card__subtitle">Обучение пройдено.</div>
+        </div>
+        <div class="step-card__check">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l4.5 4.5L16 7" stroke="#0A8F3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
       <div class="step-card__body">
@@ -443,7 +458,11 @@ img.asset-logo { object-fit: cover; }
         <div class="step-icon" id="step-icon-3">3</div>
         <div class="step-card__meta">
           <div class="step-card__label">Шаг 3</div>
-          <div class="step-card__title">Сделать первую сделку</div>
+          <div class="step-card__title">Сделайте первую сделку</div>
+          <div class="step-card__subtitle">Сделка совершена. Актив в портфеле.</div>
+        </div>
+        <div class="step-card__check">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l4.5 4.5L16 7" stroke="#0A8F3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
       <div class="step-card__body">
@@ -470,6 +489,10 @@ img.asset-logo { object-fit: cover; }
         <div class="step-card__meta">
           <div class="step-card__label">Шаг 4</div>
           <div class="step-card__title">Подключите автопополнение</div>
+          <div class="step-card__subtitle">Автопополнение подключено.</div>
+        </div>
+        <div class="step-card__check">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l4.5 4.5L16 7" stroke="#0A8F3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
       <div class="step-card__body">

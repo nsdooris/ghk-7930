@@ -1000,7 +1000,7 @@ function showFinalizer() {
   if (isIOS || both) {
     var btnIos = document.createElement('button');
     btnIos.className = 'btn btn--primary';
-    btnIos.textContent = 'Установить Альфа-Инвестиции';
+    btnIos.textContent = both ? 'Установить для iPhone (iOS)' : 'Установить Альфа-Инвестиции';
     btnIos.setAttribute('data-action', 'install_ai_ios');
     btnIos.onclick = function() {
       // TODO: track('e002_install_cta_tap', {variant, data-action:'install_ai_ios'})
@@ -1012,7 +1012,7 @@ function showFinalizer() {
   if (isAndroid || both) {
     var btnAnd = document.createElement('button');
     btnAnd.className = 'btn btn--primary';
-    btnAnd.textContent = 'Установить Альфа-Инвестиции';
+    btnAnd.textContent = both ? 'Установить для Android' : 'Установить Альфа-Инвестиции';
     btnAnd.setAttribute('data-action', 'install_ai_android');
     btnAnd.onclick = function() {
       // TODO: track('e002_install_cta_tap', {variant, data-action:'install_ai_android'})

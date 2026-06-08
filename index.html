@@ -248,10 +248,30 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 img.asset-logo { object-fit: cover; }
 .collection-intro { font-size: 14px; color: var(--c-text-2); line-height: 1.5; margin: 0 0 16px; }
+.collection-intro p  { margin: 0 0 10px; }
+.collection-intro p:last-child { margin-bottom: 0; }
+.collection-intro ul { margin: 8px 0 10px; padding-left: 20px; }
+.collection-intro li { margin-bottom: 6px; }
+.collection-heading { font-size: 18px; font-weight: 700; color: var(--c-text); margin: 0 0 12px; line-height: 1.3; }
 .sub-disclaimer { font-size: 12px; color: var(--c-text-3); line-height: 1.4; margin: 16px 0 0; }
 .sub-appbar__spacer { width: 44px; flex-shrink: 0; }
 .btn--buy { background: #EBECEF; color: var(--c-text); font-weight: 600; }
 .btn--buy:active { background: #E0E2E6; opacity: 1; }
+
+/* Legal disclaimer (коллапсируемый — шаг 3) */
+.legal-block {
+  margin-top: 16px; padding-top: 12px;
+  border-top: 1px solid var(--c-divider);
+}
+.legal-text {
+  font-size: 12px; color: var(--c-text-3); line-height: 1.45; margin: 0;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.legal-text--expanded { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.legal-toggle {
+  display: inline-block; margin-top: 4px; background: none; border: none; padding: 0;
+  font-size: 12px; color: #2066CC; cursor: pointer; font-family: inherit; line-height: 1.4;
+}
 
 /* ════════════════════════════════════════════════════════════════
    СТАТЬЯ КУРСА (шаг 2 — Курс на инвестиции)
@@ -352,6 +372,32 @@ img.asset-logo { object-fit: cover; }
   font-size: 12px; color: var(--c-text-3); line-height: 1.4; text-align: center;
 }
 </style>
+<!-- Google Analytics 4 (gtag.js) — канон GA-разметки (Майя). ID/код: 04.Sources/ga_ym.js -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-98GT8FHBZK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-98GT8FHBZK');
+</script>
+<!-- Яндекс.Метрика (счётчик 96171108) -->
+<script type="text/javascript">
+  (function (m, e, t, r, i, k, a) {
+    m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+    m[i].l = 1 * new Date();
+    for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+    k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+  })
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+  ym(96171108, "init", {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true,
+    ecommerce: "dataLayer"
+  });
+</script>
 </head>
 
 <body data-experiment="e002" data-variant="unknown">
@@ -555,15 +601,15 @@ img.asset-logo { object-fit: cover; }
 
     <h3 class="article-h3">Акции</h3>
     <p class="article-p">Акция — ценная бумага, которая даёт право на часть бизнеса компании (эмитента). Это значит, что владелец акции может голосовать на собраниях акционеров, рассчитывать на долю прибыли компании (дивиденды) и на часть её имущества в случае ликвидации. А ещё акцию можно продать и получить прибыль, если бумага за это время подорожала.</p>
-    <span class="article-badge">⬆️ Доход · 🔴 Риск</span>
+    <span class="article-badge">⬆️ Доход 🔴 Риск</span>
 
     <h3 class="article-h3">Облигации</h3>
     <p class="article-p">По сути, это долговая расписка с обязательством платить проценты (купоны). Покупатели облигаций дают в долг тому, кто их выпустил (эмитенту), на определённый срок и зарабатывают на купонах.</p>
-    <span class="article-badge">➡️ Доход · 🟢 Риск</span>
+    <span class="article-badge">➡️ Доход 🟢 Риск</span>
 
     <h3 class="article-h3">Паи биржевых фондов</h3>
     <p class="article-p">Биржевые фонды похожи на готовые наборы ценных бумаг: инвестиционные компании собирают привлекательные активы в один фонд, делят его на доли (ценные бумаги фонда — паи) и продают их на бирже инвесторам.</p>
-    <span class="article-badge">📈 Доход · 🟡 Риск</span>
+    <span class="article-badge">↗️ Доход 🟡 Риск</span>
 
     <!-- Раздел 4 -->
     <h2 class="article-h2">Сколько можно инвестировать</h2>
@@ -605,11 +651,12 @@ img.asset-logo { object-fit: cover; }
   <div class="sub-scroll" id="collectionContent">
     <!-- Карточки активов рендерит JS из config.json (collection.assets).
          Owner редактирует данные акций в config.json, не здесь. -->
-    <p class="collection-intro" id="collectionIntro"></p>
+    <div class="collection-intro" id="collectionIntro"></div>
+    <h3 class="collection-heading" id="collectionHeading" style="display:none;"></h3>
     <div id="assetList">
       <div class="content-placeholder">Загрузка подборки…</div>
     </div>
-    <p class="sub-disclaimer">Не является индивидуальной инвестиционной рекомендацией.</p>
+    <div id="legalBlock"></div>
   </div><!-- /collectionContent -->
 
   <div class="sub-footer">
@@ -680,17 +727,72 @@ img.asset-logo { object-fit: cover; }
      Держите этот блок и config.json синхронными. -->
 <script type="application/json" id="e002-config">
 {
-  "deeplinks": { "autopayment": "", "app_store": "", "play_store": "" },
+  "deeplinks": {
+    "autopayment": "",
+    "app_store": "",
+    "play_store": ""
+  },
   "collection": {
     "title": "Акции для начинающих",
-    "intro": "Популярные акции из «Народного портфеля» Московской биржи — те, что чаще всего встречаются у частных инвесторов. Начать можно от 350 ₽.",
+    "intro": "На российском рынке акций торгуются несколько сотен бумаг, и каждый начинающий инвестор задаётся вопросом: что купить в первую очередь? Универсального решения нет, но есть ряд советов, которые могут помочь.\n- Покупайте то, что знаете или чьими услугами пользуетесь.\n- В каждой отрасли есть несколько компаний — выбирайте лидеров.\n- Выбирайте известные и крупные компании, ещё лучше — если они платят дивиденды.\n- Не забывайте о диверсификации, пусть каждая выбранная компания занимается разными видами деятельности.\n\nСобрали подборку из акций, которые подходят под обозначенные критерии.",
+    "assets_heading": "Состав коллекции",
+    "legal_text": "Данная информация не является индивидуальной инвестиционной рекомендацией и финансовые инструменты либо операции, упомянутые в ней, могут не соответствовать вашему инвестиционному профилю и инвестиционным целям (ожиданиям). Определение соответствия финансового инструмента либо операции вашим интересам, инвестиционным целям, инвестиционному горизонту и уровню допустимого риска является вашей задачей. АО «Альфа-Банк» не несёт ответственности за возможные убытки в случае совершения операций, либо инвестирования в финансовые инструменты, упомянутые в данной информации, и не рекомендует использовать указанную информацию в качестве единственного источника информации при принятии инвестиционного решения. Банк настоящим информирует вас о возможном наличии конфликта интересов при предложении рассматриваемых в информационных материалах финансовых инструментов. Конфликт интересов возникает в следующих случаях: (i) Банк является эмитентом одного или нескольких рассматриваемых финансовых инструментов (получателем выгоды от распространения финансовых инструментов) и одновременно оказывает брокерские услуги и/или (ii) представляет интересы одновременно нескольких лиц при оказании им брокерских или иных услуг и/или (iii) имеет собственный интерес в совершении операций с финансовым инструментом и одновременно оказывает брокерские услуги и/или (iv) Банк владеет такими же ценными бумагами или намерен совершить с ними сделку и/или (iv) сделки по ценным бумагами будут совершены при участии Банка. Банк предпримет все необходимые и разумные меры для разрешения конфликта интересов в пользу Клиента, а также приложит все усилия по устранению неблагоприятных для Клиента последствий с целью снижения (устранения) риска причинения ущерба интересам Клиента. В целях устранения неблагоприятных последствий конфликта интересов Банк предпримет законные и наиболее адекватные с учётом конкретных обстоятельств меры, руководствуясь принципом приоритета интересов Клиента над своими собственными. Самостоятельно оценивайте возможность заключения сделок с финансовыми инструментами. Предоставленная Банком информация не является побуждением к заключению сделки. Заключение сделок с финансовыми инструментами может порождать значительные финансовые и иные риски. Сделки с финансовыми инструментами предназначены для лиц, которые готовы их принять на себя и в состоянии понести возможные финансовые потери. Перед заключением любой сделки необходимо удостовериться в том, что вы понимаете эти риски, обладаете необходимыми финансовыми и иными ресурсами для исполнения принятых на себя обязательств при любом сценарии развития событий. Ожидаемая доходность является ориентиром, и не является обязательством со стороны Банка. Информация о доходности может расцениваться не иначе как предположения. Результаты инвестиционной деятельности в прошлом не определяют результаты в будущем, а стоимость активов может как увеличиваться, так и уменьшаться. Изменения курса обмена иностранной валюты могут также вызвать дополнительное уменьшение или увеличение стоимости инвестиций. Банк не даёт гарантий или заверений и не принимает какой-либо ответственности в отношении финансовых результатов, которые могут быть получены на основании использования информации выше. Информация, приведённая в данном материале, не является индивидуальной инвестиционной рекомендацией, а упоминаемые в ней финансовые инструменты могут не подходить соответствующему клиенту. Принимая решение о проведении операции на финансовом рынке, необходимо учитывать, что инвестирование в финансовые инструменты несёт в себе риск неполучения ожидаемого дохода, потери части или даже всех инвестированных средств, расходы и возможные дополнительные потери. Следует учитывать, что финансовые инструменты, предназначенные для квалифицированных инвесторов, несут в себе повышенные риски инвестирования и подходят не для каждого лица, являющего квалифицированным инвестором. Инвестиции не являются банковским вкладом, не застрахованы в Государственной корпорации «Агентство по страхованию вкладов» и государство не даёт никаких гарантий сохранности и возврата инвестируемых денежных средств.",
     "assets": [
-      { "name": "Сбербанк", "ticker": "SBER", "image_url": "", "avatar_color": "#21A038", "deeplink": "a-investments://CA?type=instrument&value=SBER", "price": "324,48 ₽", "change": "−0,23 %", "change_positive": false, "description": "Крупнейший банк страны. Наращивает прибыль даже в сложных экономических условиях и стабильно выплачивает дивиденды." },
-      { "name": "ЛУКОЙЛ", "ticker": "LKOH", "image_url": "", "avatar_color": "#F26522", "deeplink": "a-investments://CA?type=instrument&value=LKOH", "price": "5 222 ₽", "change": "+0,06 %", "change_positive": true, "description": "Одна из крупнейших и стабильных нефтяных компаний страны. На показатели влияют курс рубля и цены на нефть." },
-      { "name": "Яндекс", "ticker": "YDEX", "image_url": "", "avatar_color": "#FF0000", "deeplink": "a-investments://CA?type=instrument&value=YDEX", "price": "4 086,50 ₽", "change": "+0,39 %", "change_positive": true, "description": "Главная технологическая компания страны. Работает во множестве направлений и растёт быстрее рынка." },
-      { "name": "Т-Технологии", "ticker": "T", "image_url": "", "avatar_color": "#FFDD2D", "deeplink": "a-investments://CA?type=instrument&value=T", "price": "316,36 ₽", "change": "+1,45 %", "change_positive": true, "description": "Финансовая компания с диверсифицированным бизнесом: банк, страхование, инвестиции и многое другое." },
-      { "name": "Полюс", "ticker": "PLZL", "image_url": "", "avatar_color": "#FFB800", "deeplink": "a-investments://CA?type=instrument&value=PLZL", "price": "2 080,40 ₽", "change": "−0,47 %", "change_positive": false, "description": "Крупнейший золотодобытчик в России и один из самых крупных в мире. Развивает масштабный проект Сухой Лог с огромными запасами золота." },
-      { "name": "НОВАТЭК", "ticker": "NVTK", "image_url": "", "avatar_color": "#003DA5", "deeplink": "a-investments://CA?type=instrument&value=NVTK", "price": "1 134,10 ₽", "change": "−1,02 %", "change_positive": false, "description": "Крупнейший частный производитель газа в России и ключевой игрок на рынке СПГ. Поставки идут даже в условиях санкций." }
+      {
+        "name": "Сбербанк",
+        "ticker": "SBER",
+        "image_url": "",
+        "avatar_color": "#21A038",
+        "deeplink": "alfabank://investments/market_asset_card?title=%D0%A1%D0%B1%D0%B5%D1%80%D0%B1%D0%B0%D0%BD%D0%BA&id=RU0009029540&subtitle=SBER&url=v1%2Fscreen-details-prefiller%2Fproducts%2Fbrokerage%2FSTOCK%2FRU0009029540&type=STOCK",
+        "price": "321,21 ₽",
+        "change": "−0,30 %",
+        "change_positive": false,
+        "description": "Крупнейший банк страны, имеет высокую рентабельность. Даже в самых сложных экономических ситуациях он развивается и наращивает прибыль, которой делится с инвесторами через выплаты дивидендов. Сбер знает практически каждый житель страны, и у большей части населения есть счёт в этом банке."
+      },
+      {
+        "name": "Т-Технологии",
+        "ticker": "T",
+        "image_url": "",
+        "avatar_color": "#FFDD2D",
+        "deeplink": "alfabank://investments/market_asset_card?title=%D0%A2-%D0%A2%D0%B5%D1%85%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D0%B8&id=RU000A107UL4&subtitle=T&url=v1%2Fscreen-details-prefiller%2Fproducts%2Fbrokerage%2FSTOCK%2FRU000A107UL4&type=STOCK",
+        "price": "294,32 ₽",
+        "change": "−1,17 %",
+        "change_positive": false,
+        "description": "Одна из крупнейших финансовых организаций в стране, она широко известна своим дистанционным обслуживанием. Группа оказывает банковские услуги, а также брокерские и страховые. Помимо этого, Т-Технологии сегодня — один из лидеров отрасли FinTech, с постоянно расширяющимися возможностями и клиентской базой."
+      },
+      {
+        "name": "Яндекс",
+        "ticker": "YDEX",
+        "image_url": "",
+        "avatar_color": "#FF0000",
+        "deeplink": "alfabank://investments/market_asset_card?title=%D0%AF%D0%BD%D0%B4%D0%B5%D0%BA%D1%81&id=RU000A107T19&subtitle=YDEX&url=v1%2Fscreen-details-prefiller%2Fproducts%2Fbrokerage%2FSTOCK%2FRU000A107T19&type=STOCK",
+        "price": "3 918,00 ₽",
+        "change": "−1,52 %",
+        "change_positive": false,
+        "description": "Крупнейший участник IT-рынка, присутствующий также во многих сегментах. Компания известна не только своей поисковой системой, агрегатором такси и доставки, ещё она развивает маркетплейс, банк, высокие технологии и искусственный интеллект. Яндекс динамично растёт, сохраняя потенциал к дальнейшему росту. Кроме того, компания начала платить дивиденды."
+      },
+      {
+        "name": "Роснефть",
+        "ticker": "ROSN",
+        "image_url": "",
+        "avatar_color": "#E87722",
+        "deeplink": "alfabank://investments/market_asset_card?title=%D0%A0%D0%BE%D1%81%D0%BD%D0%B5%D1%84%D1%82%D1%8C&id=RU000A0J2Q06&subtitle=ROSN&url=v1%2Fscreen-details-prefiller%2Fproducts%2Fbrokerage%2FSTOCK%2FRU000A0J2Q06&type=STOCK",
+        "price": "389,45 ₽",
+        "change": "+0,84 %",
+        "change_positive": true,
+        "description": "Ещё одна крупная нефтяная компания на рынке. В своём секторе Роснефть считается единственной растущей историей благодаря реализации масштабного проекта Восток Ойл, который позволит нарастить добычу нефти и производство высокомаржинальной продукции. Всё это позитивно для будущих дивидендов."
+      },
+      {
+        "name": "ЛУКОЙЛ",
+        "ticker": "LKOH",
+        "image_url": "",
+        "avatar_color": "#F26522",
+        "deeplink": "alfabank://investments/market_asset_card?title=%D0%9B%D1%83%D0%BA%D0%BE%D0%B9%D0%BB&id=RU0009024277&subtitle=LKOH&url=v1%2Fscreen-details-prefiller%2Fproducts%2Fbrokerage%2FSTOCK%2FRU0009024277&type=STOCK",
+        "price": "4 841,50 ₽",
+        "change": "+0,38 %",
+        "change_positive": true,
+        "description": "Одна из крупнейших нефтяных компаний в стране, и её акции — одни из самых популярных среди частных инвесторов. Финансовые результаты ЛУКОЙЛа устойчивы благодаря стабильным ценам на нефть и ослаблению рубля. У компании отсутствует долг, есть запас свободной ликвидности, в том числе в валюте, генерирующий дополнительный доход и позволяющий платить дивиденды."
+      }
     ]
   }
 }
@@ -756,6 +858,30 @@ function loadConfig() {
   } catch(e) {}
 }
 
+/* ── Рендер intro подборки ────────────────────────────────────────
+   intro в config — плоская строка (так же лежит в gist-override).
+   Разбиваем на блоки: строки, начинающиеся с «- / – / —» → пункты
+   маркированного списка; пустая строка разделяет абзацы; остальное —
+   абзацы <p>. Все значения проходят esc(). ─────────────────────── */
+function renderIntroText(s) {
+  var lines = String(s == null ? '' : s).split('\n');
+  var html = '', inList = false;
+  function closeList() { if (inList) { html += '</ul>'; inList = false; } }
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) { closeList(); continue; }
+    if (/^[-–—]\s*/.test(line)) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += '<li>' + esc(line.replace(/^[-–—]\s*/, '')) + '</li>';
+    } else {
+      closeList();
+      html += '<p>' + esc(line) + '</p>';
+    }
+  }
+  closeList();
+  return html;
+}
+
 /* ── Рендер подборки из config (карточки активов шага 3) ──────── */
 function renderCollection() {
   var list  = document.getElementById('assetList');
@@ -764,12 +890,26 @@ function renderCollection() {
 
   var col = CONFIG && CONFIG.collection;
   if (!col || !col.assets || !col.assets.length) {
-    if (intro) intro.textContent = '';
+    if (intro) intro.innerHTML = '';
+    var h0 = document.getElementById('collectionHeading');
+    if (h0) h0.style.display = 'none';
     list.innerHTML = '<div class="content-placeholder">Подборка временно недоступна.</div>';
     return;
   }
 
-  if (intro) intro.textContent = col.intro || '';
+  // Intro: парсим плоскую строку (абзацы + строки «- ...» → список)
+  if (intro) intro.innerHTML = renderIntroText(col.intro || '');
+
+  // Подзаголовок перед карточками («Состав коллекции»)
+  var heading = document.getElementById('collectionHeading');
+  if (heading) {
+    if (col.assets_heading) {
+      heading.textContent = col.assets_heading;
+      heading.style.display = '';
+    } else {
+      heading.style.display = 'none';
+    }
+  }
 
   var html = '';
   col.assets.forEach(function(a, i) {
@@ -793,13 +933,27 @@ function renderCollection() {
             ? '<p class="asset-desc" id="adesc-' + i + '">' + esc(a.description) + '</p>'
             + '<button class="asset-toggle" id="atoggle-' + i + '" onclick="toggleDesc(' + i + ')">Подробнее</button>'
             : '')
-      +   '<button class="btn btn--buy" style="margin-top:12px;" data-step="3" data-action="step3_buy_tap" data-ticker="' + esc(a.ticker) + '">Купить</button>'
+      +   '<button class="btn btn--buy" style="margin-top:12px;" data-step="3" data-action="asset_click" data-ticker="' + esc(a.ticker) + '">Купить</button>'
       + '</div>';
   });
   list.innerHTML = html;
 
+  // Legal disclaimer
+  var lb = document.getElementById('legalBlock');
+  if (lb) {
+    var lt = col.legal_text;
+    if (lt) {
+      lb.innerHTML = '<div class="legal-block">'
+        + '<p class="legal-text" id="legal-text">' + esc(lt) + '</p>'
+        + '<button class="legal-toggle" id="legal-toggle" onclick="toggleLegal()">Подробнее</button>'
+        + '</div>';
+    } else {
+      lb.innerHTML = '<p class="sub-disclaimer">Не является индивидуальной инвестиционной рекомендацией.</p>';
+    }
+  }
+
   // Обработчики «Купить» — диплинк на карточку актива из config
-  var btns = list.querySelectorAll('button[data-action="step3_buy_tap"]');
+  var btns = list.querySelectorAll('button[data-action="asset_click"]');
   for (var i = 0; i < btns.length; i++) {
     (function(asset) {
       btns[i].addEventListener('click', function() {
@@ -809,25 +963,36 @@ function renderCollection() {
   }
 }
 
-/* ── A/B параметры из URL ─────────────────────────────────────── */
-var urlParams    = new URLSearchParams(window.location.search);
-var variantParam = (urlParams.get('v') || '').toUpperCase();
-var userHash     = urlParams.get('u') || '';
+/* ── Вариант лендинга (захардкожен — отдельный URL на вариант) ─── */
+var variant = 'B';   // treatment-группа; var: 'var2' в GA/YM
 
-// Валидные варианты: A, B, C
-var VALID_VARIANTS = ['A', 'B', 'C'];
-var variant = VALID_VARIANTS.indexOf(variantParam) !== -1 ? variantParam : 'unknown';
-
-/* ── Tracking (TODO: заменить console.log на реальный трекер) ──── */
+/* ── Tracking: GA + Яндекс.Метрика по канону Майи (var + dimension_N) ─
+   Канон: 04.Sources/prompt-ga-razmetka-analyst.md. Коды GA/YM: 04.Sources/ga_ym.js.
+   TASK_ID = 7930 — номер таски в GA/YM (имя события 7930_*).
+   Внутреннее логическое имя в коде — e002_* (track() переводит префикс).
+   var: 'var2' — фиксировано (этот файл = вариант B).
+   Доп. значения → dimension_N (легенда — в tracking.md).                  */
+var TASK_ID = '7930';
+var YM_ID   = 96171108;
+var DIM_MAP = {
+  'data-step':   'dimension_1',   // шаг чек-листа (1–4)
+  'data-action': 'dimension_2',   // действие / цель CTA
+  'ticker':      'dimension_3'    // тикер актива (шаг 3)
+};
 function track(ev, props) {
   try {
-    var p = Object.assign({
-      variant: variant,
-      user: userHash,
-      experiment: 'e002'
-    }, props || {});
-    // TODO: window.analytics && window.analytics.track(ev, p);
-    console && console.log('[E-002]', ev, p);
+    var name = String(ev).replace(/^e002_/, TASK_ID + '_');   // e002_x → 7930_x
+    var payload = { var: 'var2' };
+    var src = props || {};
+    for (var k in src) {
+      if (!Object.prototype.hasOwnProperty.call(src, k)) continue;
+      var dim = DIM_MAP[k];
+      if (dim) payload[dim] = String(src[k]);   // канон: значения строкой
+    }
+    window.dataLayer = window.dataLayer || [];
+    if (typeof gtag === 'function') { try { gtag('event', name, payload); } catch(e) {} }
+    if (typeof ym   === 'function') { try { ym(YM_ID, 'reachGoal', name, payload); } catch(e) {} }
+    console && console.log('[E-002]', name, payload);
   } catch(e) {}
 }
 
@@ -874,8 +1039,7 @@ function countDone() { return steps.filter(Boolean).length; }
 function hasBridge() { return typeof window.AlfaIntegration !== 'undefined'; }
 
 function handleClose() {
-  // TODO: track('e002_webview_closed', {steps_completed: countDone()})
-  track('e002_webview_closed', { steps_completed: countDone() });
+  track('e002_webview_close', { steps_completed: countDone() });
   try {
     hasBridge() ? window.AlfaIntegration.closeWebView() : history.back();
   } catch(e) { try { history.back(); } catch(e2) {} }
@@ -979,48 +1143,31 @@ function showFinalizer() {
   var el = document.getElementById('finalizer');
   if (!el || el.classList.contains('visible')) return;
 
-  // TODO: track('e002_checklist_all_completed', {variant})
-  track('e002_checklist_all_completed', {});
+  track('e002_checklist_complete_all', {});
 
   el.classList.add('visible');
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
       el.classList.add('shown');
-      // TODO: track('e002_finalizer_shown', {variant})
-      track('e002_finalizer_shown', {});
+      track('e002_finalizer_impression', {});
     });
   });
 
-  // Строим кнопки финализатора (UA-детекция)
+  // Финализатор: одна кнопка — переход в веб-версию Альфа-Инвестиций.
+  // URL берётся из config (deeplinks.web), дефолт — invest.alfabank.ru.
   var ctas = document.getElementById('finalizerCtas');
   if (!ctas) return;
   ctas.innerHTML = '';
 
-  var both = !isIOS && !isAndroid;
-  if (isIOS || both) {
-    var btnIos = document.createElement('button');
-    btnIos.className = 'btn btn--primary';
-    btnIos.textContent = both ? 'Установить для iPhone (iOS)' : 'Установить Альфа-Инвестиции';
-    btnIos.setAttribute('data-action', 'install_ai_ios');
-    btnIos.onclick = function() {
-      // TODO: track('e002_install_cta_tap', {variant, data-action:'install_ai_ios'})
-      track('e002_install_cta_tap', { 'data-action': 'install_ai_ios' });
-      openExternal(dl('app_store'));
-    };
-    ctas.appendChild(btnIos);
-  }
-  if (isAndroid || both) {
-    var btnAnd = document.createElement('button');
-    btnAnd.className = 'btn btn--primary';
-    btnAnd.textContent = both ? 'Установить для Android' : 'Установить Альфа-Инвестиции';
-    btnAnd.setAttribute('data-action', 'install_ai_android');
-    btnAnd.onclick = function() {
-      // TODO: track('e002_install_cta_tap', {variant, data-action:'install_ai_android'})
-      track('e002_install_cta_tap', { 'data-action': 'install_ai_android' });
-      openExternal(dl('play_store'));
-    };
-    ctas.appendChild(btnAnd);
-  }
+  var btnWeb = document.createElement('button');
+  btnWeb.className = 'btn btn--primary';
+  btnWeb.textContent = 'Перейти в Альфа-Инвестиции';
+  btnWeb.setAttribute('data-action', 'open_web');
+  btnWeb.onclick = function() {
+    track('e002_finalizer_click', { 'data-action': 'open_web' });
+    openExternal(dl('web', 'https://invest.alfabank.ru'));
+  };
+  ctas.appendChild(btnWeb);
 
   /*
     UX TBD: fallback-кнопка «Вернуться в приложение»
@@ -1037,7 +1184,6 @@ function showFinalizer() {
 }
 
 function handleFinalizerClose() {
-  // TODO: track('e002_finalizer_close', {variant})
   track('e002_finalizer_close', {});
   try {
     hasBridge() ? window.AlfaIntegration.closeWebView() : history.back();
@@ -1067,16 +1213,37 @@ function openSubScreen(type) {
   history.pushState({ subScreen: type }, '');
 
   if (type === 'article') {
-    // TODO: track('e002_step2_cta_tap', {variant, 'data-step':2, 'data-action':'open_article'})
-    track('e002_step2_cta_tap', { 'data-step': 2, 'data-action': 'open_article' });
-    // TODO: track('e002_step2_article_opened', {variant, 'data-step':2})
-    track('e002_step2_article_opened', { 'data-step': 2 });
+    track('e002_checklist_click_step2', { 'data-step': 2, 'data-action': 'open_article' });
+    track('e002_article_impression', { 'data-step': 2 });
+    watchArticleRead();   // дочитывание лонгрида → e002_article_read
   } else {
-    // TODO: track('e002_step3_cta_tap', {variant, 'data-step':3, 'data-action':'open_collection'})
-    track('e002_step3_cta_tap', { 'data-step': 3, 'data-action': 'open_collection' });
-    // TODO: track('e002_step3_collection_opened', {variant, 'data-step':3})
-    track('e002_step3_collection_opened', { 'data-step': 3 });
+    track('e002_checklist_click_step3', { 'data-step': 3, 'data-action': 'open_collection' });
+    track('e002_collection_impression', { 'data-step': 3 });
   }
+}
+
+/* ── Дочитывание лонгрида шага 2 (e002_article_read) ────────
+   Срабатывает один раз за открытие: статья доскроллена до конца
+   (или целиком помещается на экран).                                  */
+var articleReadFired = false;
+function watchArticleRead() {
+  var sc = document.getElementById('articleContent');
+  if (!sc) return;
+  articleReadFired = false;
+  function fire() {
+    if (articleReadFired) return;
+    articleReadFired = true;
+    sc.removeEventListener('scroll', onScroll);
+    track('e002_article_read', { 'data-step': 2 });
+  }
+  function onScroll() {
+    if (sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 24) fire();
+  }
+  sc.addEventListener('scroll', onScroll);
+  // Контент короче экрана — считаем прочитанным сразу (после layout)
+  requestAnimationFrame(function() {
+    if (sc.scrollHeight <= sc.clientHeight + 24) fire();
+  });
 }
 
 /* ── Закрытие под-экрана (засчёт шага) ───────────────────────── */
@@ -1096,11 +1263,9 @@ function closeSubScreen(type, markStep) {
     saveState(steps);
 
     if (type === 'article') {
-      // TODO: track('e002_step2_completed', {variant, 'data-step':2})
-      track('e002_step2_completed', { 'data-step': 2 });
+      track('e002_checklist_complete_step2', { 'data-step': 2 });
     } else {
-      // TODO: track('e002_step3_completed', {variant, 'data-step':3})
-      track('e002_step3_completed', { 'data-step': 3 });
+      track('e002_checklist_complete_step3', { 'data-step': 3 });
     }
 
     renderAll(true);
@@ -1117,20 +1282,27 @@ function toggleDesc(i) {
   toggle.textContent = exp ? 'Подробнее' : 'Свернуть';
 }
 
+function toggleLegal() {
+  var text   = document.getElementById('legal-text');
+  var toggle = document.getElementById('legal-toggle');
+  if (!text || !toggle) return;
+  var exp = text.classList.contains('legal-text--expanded');
+  text.classList.toggle('legal-text--expanded', !exp);
+  toggle.textContent = exp ? 'Подробнее' : 'Свернуть';
+}
+
 /* ── Кнопка «Купить» у актива (шаг 3) ──────────────────────────
    Решение Lead 2026-06-04: decisions.md строки 49-54
-   Источник событий: tracking.md — событие e002_step3_buy_tap
+   Источник событий: tracking.md — событие e002_asset_click
    ─────────────────────────────────────────────────────────────── */
 function handleBuyAsset(deeplink, ticker) {
-  // TODO: track('e002_step3_buy_tap', {variant, ticker: ticker})
-  track('e002_step3_buy_tap', { ticker: ticker });
+  track('e002_asset_click', { ticker: ticker });
 
   // Засчитываем шаг 3 ДО вызова диплинка
   if (!steps[2]) {
     steps[2] = true;
     saveState(steps);
-    // TODO: track('e002_step3_completed', {variant, 'data-step':3})
-    track('e002_step3_completed', { 'data-step': 3 });
+    track('e002_checklist_complete_step3', { 'data-step': 3 });
   }
 
   // Закрываем под-экран (без повторного track completed)
@@ -1151,10 +1323,8 @@ function handleStep4() {
   if (!steps[3]) {
     steps[3] = true;
     saveState(steps);
-    // TODO: track('e002_step4_cta_tap', {variant, 'data-step':4, 'data-action':'deeplink_autopayment'})
-    track('e002_step4_cta_tap', { 'data-step': 4, 'data-action': 'deeplink_autopayment' });
-    // TODO: track('e002_step4_completed', {variant, 'data-step':4})
-    track('e002_step4_completed', { 'data-step': 4 });
+    track('e002_checklist_click_step4', { 'data-step': 4, 'data-action': 'deeplink_autopayment' });
+    track('e002_checklist_complete_step4', { 'data-step': 4 });
     renderAll(true);
   }
   openDeeplink(dl('autopayment'));
@@ -1186,17 +1356,10 @@ document.addEventListener('visibilitychange', function() {
 
 /* ── Init ────────────────────────────────────────────────────── */
 function init() {
-  // Проставляем data-variant на body из URL
   document.body.setAttribute('data-experiment', 'e002');
   document.body.setAttribute('data-variant', variant);
 
   updateOffline();
-
-  // Трекинг invalid_assignment
-  if (variant === 'unknown') {
-    // TODO: track('e002_invalid_assignment', {variant_param: variantParam, url: location.href})
-    track('e002_invalid_assignment', { variant_param: variantParam, url: location.href });
-  }
 
   renderAll(false);
 
@@ -1207,13 +1370,11 @@ function init() {
   document.getElementById('skeleton').style.display = 'none';
   document.getElementById('contentWrap').classList.add('ready');
 
-  // TODO: track('e002_checklist_opened', {variant})
-  track('e002_checklist_opened', { variant: variant });
+  track('e002_checklist_impression', {});
 
-  // Трекинг step1_auto_completed — только при первом визите
+  // Трекинг checklist_complete_step1 — только при первом визите
   if (isFirstVisit) {
-    // TODO: track('e002_step1_auto_completed', {variant})
-    track('e002_step1_auto_completed', {});
+    track('e002_checklist_complete_step1', {});
   }
 
   // Если все шаги уже выполнены (повторный визит) — сразу финализатор
